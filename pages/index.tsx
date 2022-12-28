@@ -1,90 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Center,
   useColorMode,
   Tooltip,
   IconButton,
   SunIcon,
   MoonIcon,
-  Image,
   HStack,
   Text,
-  Heading,
-  Box,
-  Link,
   VStack,
   Button,
-  AspectRatio,
+  TextField,
+  Stack,
+  Pressable,
+  Link,
 } from "native-base";
 
 // Start editing here, save and see your changes.
 export default function App() {
+  const [noOfpages, setNoOfpages] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [data, setData] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [allData, setAllData] = useState([]);
+  async function getData() {
+    const response = await fetch("/data.json");
+    const data = await response.json();
+    setData(data);
+    setAllData(data);
+    console.log(data);
+    const noOfPages = Math.ceil(data.length / itemsPerPage);
+    setNoOfpages(noOfPages);
+  }
+
+  function search(text: string) {
+    setSearchValue(text);
+    const newData = allData.filter((item: any) => {
+      return item.Title.toLowerCase().includes(text.toLocaleLowerCase());
+    });
+    setData(newData);
+    const noOfPages = Math.ceil(newData.length / itemsPerPage);
+    setNoOfpages(noOfPages);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
-    <Center
-      flex={1}
-      _dark={{ bg: "blueGray.900" }}
-      _light={{ bg: "blueGray.50" }}
-    >
-      <VStack alignItems="center" space="md">
-        <HStack alignItems="center" space="2xl">
-          <AspectRatio w={24} ratio={1.66}>
-            <Image
-              source={{ uri: "images/nextjs-logo.png" }}
-              alt="NextJS Logo"
-              resizeMode="contain"
-            />
-          </AspectRatio>
-          <Text fontSize="4xl">+</Text>
-          <Image
-            source={{ uri: "images/nativebase-logo.svg" }}
-            alt="NativeBase Logo"
-            size={24}
-            resizeMode="contain"
+    <VStack w="100vw" h="100vh" _dark={colors.dark} _light={colors.light}>
+      <VStack>
+        <HStack w="100vw" h="20">
+          <ChangingTextLogo />
+          <TextField
+            placeholder="Search"
+            w="60%"
+            mx="auto"
+            my="auto"
+            _dark={colors.dark}
+            _light={colors.light}
+            value={searchValue}
+            onChangeText={(text) => search(text)}
           />
+          <ColorModeSwitch />
         </HStack>
-        <Heading>Welcome to NativeBase</Heading>
-        <Text>
-          Edit{" "}
-          <Box
-            _text={{
-              fontFamily: "monospace",
-              fontSize: "sm",
-            }}
-            px={2}
-            py={1}
-            _dark={{ bg: "blueGray.800" }}
-            _light={{ bg: "blueGray.200" }}
-          >
-            src/pages/index.js
-          </Box>{" "}
-          and save to reload.
-        </Text>
-        <HStack alignItems="center" space="sm">
-          <Link href="https://nextjs.org/docs/getting-started" isExternal>
-            <Text
-              _light={{ color: "gray.700" }}
-              _dark={{ color: "gray.400" }}
-              underline
-              fontSize={"xl"}
-            >
-              Learn NextJS
-            </Text>
-          </Link>
-          <Text>/</Text>
-          <Link href="https://docs.nativebase.io" isExternal>
-            <Text color="primary.500" underline fontSize={"xl"}>
-              Learn NativeBase
-            </Text>
-          </Link>
-        </HStack>
+        <VStack w="100vw" p="4" h="90vh" overflowY={"scroll"}>
+          <PageItems
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            data={data}
+          />
+          <NextPrevPage
+            currentPage={currentPage}
+            noOfPages={noOfpages}
+            setCurrentPage={setCurrentPage}
+          />
+        </VStack>
       </VStack>
-      <ColorModeSwitch />
-      <Link mt="6" href="https://docs.nativebase.io" isExternal>
-        <Button variant="outline" colorScheme="coolGray">
-          View Repo
-        </Button>
-      </Link>
-    </Center>
+    </VStack>
   );
 }
 // Color Switch Component
@@ -99,7 +91,7 @@ function ColorModeSwitch() {
     >
       <IconButton
         position="absolute"
-        top={12}
+        top={5}
         right={8}
         onPress={toggleColorMode}
         icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
@@ -108,3 +100,174 @@ function ColorModeSwitch() {
     </Tooltip>
   );
 }
+
+const ChangingTextLogo = () => {
+  const texts = ["Itihas","इतिहास",];
+  const [text, setText] = useState(texts[0]);
+  useEffect(() => {
+    let i = 0;
+    setInterval(() => {
+      setText(texts[i]);
+      i = (i + 1) % texts.length;
+    }, 2000);
+  }, []);
+
+  return (
+    <Text
+      my="auto"
+      mx="5"
+      w="40"
+      fontSize={ "4xl"}
+      fontWeight="bold"
+    >
+      {text}
+    </Text>
+  );
+};
+
+const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
+  const [windowWidth, setWindowWidth] = useState(0);
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+  }, [currentPage, setWindowWidth, windowWidth]);
+
+  return (
+    <HStack justifyContent="center" h="90%" overflow={"scroll"}>
+      <VStack>
+        {data.length > 0 &&
+          Array.from(Array(itemsPerPage).keys()).map((item) => {
+            return (
+              <HStack key={item}>
+                {data[currentPage * itemsPerPage + item] && (
+                  <HStack
+                    key={item}
+                    m="2"
+                    space="2"
+                    h="50"
+                    w="70vw"
+                    rounded={10}
+                    _dark={colors.dark}
+                    _light={colors.light}
+                    shadow={4}
+                  >
+                    <Text
+                      mx="10%"
+                      my="auto"
+                      noOfLines={2}
+                      _dark={colors.dark}
+                      _light={colors.light}
+                      w="40%"
+                    >
+                      {data[currentPage * itemsPerPage + item].Title}
+                    </Text>
+                    <Text
+                      my="auto"
+                      noOfLines={2}
+                      _dark={colors.dark}
+                      _light={colors.light}
+                      w="20%"
+                    >
+                      {data[currentPage * itemsPerPage + item].Author}
+                    </Text>
+                    <Text
+                      my="auto"
+                      noOfLines={2}
+                      _dark={colors.dark}
+                      _light={colors.light}
+                      w="20%"
+                    >
+                      {data[currentPage * itemsPerPage + item].Pages}
+                    </Text>
+                    <Text
+                      my="auto"
+                      noOfLines={2}
+                      _dark={colors.dark}
+                      _light={colors.light}
+                      w="20%"
+                    >
+                      {data[currentPage * itemsPerPage + item].Year}
+                    </Text>
+                  </HStack>
+                )}
+                {data[currentPage * itemsPerPage + item] && (
+                  <Link
+                    href={
+                      "http://arweave.net/" +
+                      data[currentPage * itemsPerPage + item].Link
+                    }
+                    m="auto"
+                  >
+                    <Pressable
+                      w="10vw"
+                      h="50"
+                      rounded={10}
+                      _dark={colors.dark}
+                      _light={colors.light}
+                      shadow={4}
+                    >
+                      <Text
+                        my="auto"
+                        mx="auto"
+                        _dark={colors.dark}
+                        _light={colors.light}
+                      >
+                        Read
+                      </Text>
+                    </Pressable>
+                  </Link>
+                )}
+              </HStack>
+            );
+          })}
+      </VStack>
+    </HStack>
+  );
+};
+
+const NextPrevPage = ({ currentPage, noOfPages, setCurrentPage }: any) => {
+  //return 10 buttons for 10 pages
+  return (
+    <HStack mx="auto">
+      <Button disabled={currentPage === 0} onPress={() => setCurrentPage(0)}>
+        First
+      </Button>
+      {Array.from(Array(noOfPages).keys()).map((page) => {
+        return (
+          <Stack key={page}>
+            {currentPage - page < 3 && currentPage - page > -3 && (
+              <Button
+                w="10"
+                m="2"
+                key={page}
+                onPress={() => setCurrentPage(page)}
+              >
+                {page + 1}
+              </Button>
+            )}
+          </Stack>
+        );
+      })}
+      <Button
+        disabled={currentPage === noOfPages - 1}
+        onPress={() => setCurrentPage(noOfPages - 1)}
+      >
+        Last
+      </Button>
+    </HStack>
+  );
+};
+
+const colors = {
+  dark: {
+    bg: "gray.800",
+    color: "gray.50",
+  },
+  light: {
+    bg: "gray.50",
+    color: "gray.800",
+  },
+};
