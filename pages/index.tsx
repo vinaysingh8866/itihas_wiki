@@ -13,6 +13,7 @@ import {
   Stack,
   Pressable,
   Link,
+  Input,
 } from "native-base";
 
 // Start editing here, save and see your changes.
@@ -51,16 +52,14 @@ export default function App() {
       <VStack>
         <HStack w="100vw" h="20">
           <ChangingTextLogo />
-          <TextField
-            placeholder="Search"
+          <Input
             w="60%"
             mx="auto"
             my="auto"
-            _dark={colors.dark}
-            _light={colors.light}
             value={searchValue}
             onChangeText={(text) => search(text)}
           />
+
           <ColorModeSwitch />
         </HStack>
         <VStack w="100vw" p="4" h="90vh" overflowY={"scroll"}>
@@ -102,7 +101,7 @@ function ColorModeSwitch() {
 }
 
 const ChangingTextLogo = () => {
-  const texts = ["Itihas","इतिहास",];
+  const texts = ["Itihas", "इतिहास"];
   const [text, setText] = useState(texts[0]);
   useEffect(() => {
     let i = 0;
@@ -113,13 +112,7 @@ const ChangingTextLogo = () => {
   }, []);
 
   return (
-    <Text
-      my="auto"
-      mx="5"
-      w="40"
-      fontSize={ "4xl"}
-      fontWeight="bold"
-    >
+    <Text my="auto" mx="5" w="40" fontSize={"4xl"} fontWeight="bold">
       {text}
     </Text>
   );
