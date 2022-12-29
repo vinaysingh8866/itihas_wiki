@@ -213,7 +213,7 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                     shadow={4}
                     my="auto"
                     onPress={() =>{
-                      const url = "http://arweave.net/" + data[currentPage * itemsPerPage + item].Link
+                      const url = "https://arweave.net/" + data[currentPage * itemsPerPage + item].Link
                       //open url in new tab
                       window.open(url, "_blank")
                     } }
