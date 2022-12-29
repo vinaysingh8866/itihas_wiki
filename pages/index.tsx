@@ -50,12 +50,13 @@ export default function App() {
   return (
     <VStack w="100vw" h="100vh" _dark={colors.dark} _light={colors.light}>
       <VStack>
-        <HStack w="100vw" h="20">
+        <HStack w="100vw" h="20" justifyContent="center">
           <ChangingTextLogo />
           <Input
-            w="60%"
-            mx="auto"
+            w={["45vw", "45vw", "40vw", "60vw"]}
+            mx="4"
             my="auto"
+            placeholder="Search"
             value={searchValue}
             onChangeText={(text) => search(text)}
           />
@@ -89,9 +90,6 @@ function ColorModeSwitch() {
       closeOnClick={false}
     >
       <IconButton
-        position="absolute"
-        top={5}
-        right={8}
         onPress={toggleColorMode}
         icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
         accessibilityLabel="Color Mode Switch"
