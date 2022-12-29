@@ -248,7 +248,7 @@ const NextPrevPage = ({ currentPage, noOfPages, setCurrentPage }: any) => {
       {Array.from(Array(noOfPages).keys()).map((page) => {
         return (
           <Stack key={page}>
-            {currentPage - page < 3 && currentPage - page > -3 && (
+            {currentPage - page < 2 && currentPage - page > -2 && (
               <Button
                 w="10"
                 m="2"
