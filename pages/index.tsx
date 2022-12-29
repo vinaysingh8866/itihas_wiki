@@ -204,31 +204,29 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                   </HStack>
                 )}
                 {data[currentPage * itemsPerPage + item] && (
-                  <Link
-                    href={
-                      "http://arweave.net/" +
-                      data[currentPage * itemsPerPage + item].Link
-                    }
-                    m="auto"
+                  <Pressable
+                    w="10vw"
+                    h="50"
+                    rounded={10}
+                    _dark={colors.dark}
+                    _light={colors.light}
+                    shadow={4}
+                    my="auto"
+                    onPress={() =>{
+                      const url = "http://arweave.net/" + data[currentPage * itemsPerPage + item].Link
+                      //open url in new tab
+                      window.open(url, "_blank")
+                    } }
                   >
-                    <Pressable
-                      w="10vw"
-                      h="50"
-                      rounded={10}
+                    <Text
+                      my="auto"
+                      mx="auto"
                       _dark={colors.dark}
                       _light={colors.light}
-                      shadow={4}
                     >
-                      <Text
-                        my="auto"
-                        mx="auto"
-                        _dark={colors.dark}
-                        _light={colors.light}
-                      >
-                        Read
-                      </Text>
-                    </Pressable>
-                  </Link>
+                      Read
+                    </Text>
+                  </Pressable>
                 )}
               </HStack>
             );
