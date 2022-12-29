@@ -156,7 +156,7 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                     key={item}
                     m="2"
                     space="2"
-                    h="50"
+                    h="20"
                     w="70vw"
                     rounded={10}
                     _dark={colors.dark}
@@ -166,7 +166,7 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                     <Text
                       mx="10%"
                       my="auto"
-                      noOfLines={2}
+                      noOfLines={3}
                       _dark={colors.dark}
                       _light={colors.light}
                       w="40%"
