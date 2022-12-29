@@ -64,6 +64,23 @@ export default function App() {
           <ColorModeSwitch />
         </HStack>
         <VStack w="100vw" p="4" h="90vh" overflowY={"scroll"}>
+          <HStack
+            m="2"
+            space="2"
+            h="10"
+            w="72vw"
+            mx="auto"
+            rounded={10}
+            _dark={colors.dark}
+            _light={colors.light}
+            justifyContent="space-between"
+          >
+            <Text w="30%">Title</Text>
+            <Text ml="-10">Author</Text>
+            <Text ml="-10">Pages</Text>
+            <Text ml="-10">Year</Text>
+            <Text></Text>
+          </HStack>
           <PageItems
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
@@ -127,24 +144,8 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
   }, [currentPage, setWindowWidth, windowWidth]);
 
   return (
-    <HStack justifyContent="center" h="90%" overflow={"scroll"}>
+    <HStack justifyContent="center" h="80%" overflow={"scroll"}>
       <VStack>
-        <HStack
-          m="2"
-          space="2"
-          h="50"
-          w="72vw"
-          rounded={10}
-          _dark={colors.dark}
-          _light={colors.light}
-        >
-          <Text mx="10%" w="40%">
-            Title
-          </Text>
-          <Text w="15%">Author</Text>
-          <Text w="20%">Pages</Text>
-          <Text w="20%">Year</Text>
-        </HStack>
         {data.length > 0 &&
           Array.from(Array(itemsPerPage).keys()).map((item) => {
             return (
