@@ -131,6 +131,22 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
   return (
     <HStack justifyContent="center" h="90%" overflow={"scroll"}>
       <VStack>
+        <HStack
+          m="2"
+          space="2"
+          h="50"
+          w="72vw"
+          rounded={10}
+          _dark={colors.dark}
+          _light={colors.light}
+        >
+          <Text mx="10%" w="40%">
+            Title
+          </Text>
+          <Text w="15%">Author</Text>
+          <Text w="20%">Pages</Text>
+          <Text w="20%">Year</Text>
+        </HStack>
         {data.length > 0 &&
           Array.from(Array(itemsPerPage).keys()).map((item) => {
             return (
@@ -172,6 +188,7 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                       _dark={colors.dark}
                       _light={colors.light}
                       w="20%"
+                      px="3"
                     >
                       {data[currentPage * itemsPerPage + item].Pages}
                     </Text>
@@ -181,6 +198,7 @@ const PageItems = ({ currentPage, itemsPerPage, data }: any) => {
                       _dark={colors.dark}
                       _light={colors.light}
                       w="20%"
+                      px="3"
                     >
                       {data[currentPage * itemsPerPage + item].Year}
                     </Text>
